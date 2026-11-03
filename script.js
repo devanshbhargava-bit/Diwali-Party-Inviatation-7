@@ -1,7 +1,7 @@
 /* ============ EDIT ME: ALL PLACEHOLDER CONTENT LIVES HERE ============ */
 const CONFIG = {
   // Paste your Google Apps Script Web App URL here (see README). Until then, RSVPs CANNOT be saved.
-  APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbwpfBrUWM8NtSRndezVS8FiExEPtf4XZAHmQhY45ppTFWHYKlOXTYMxvXhgl1xmmwDG/exec',
+  APPS_SCRIPT_URL: 'PASTE_YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE',
 
   // Background music: paste any YouTube link between the quotes (leave '' for no music).
   // Example: 'https://www.youtube.com/watch?v=XXXXXXXXXXX'. Music starts on the guest's first tap; a 🔊 button mutes it.
@@ -104,9 +104,12 @@ if (!reduce) setInterval(() => { if (!document.hidden && P.length < 500) rocket(
 
 /* ---------- Screen 1: hosts ---------- */
 function renderHosts() {
-  $('#hostGrid').innerHTML = CONFIG.hosts.map((h, i) =>
-    `<button class="host${h.pet ? ' pet' : ''}" data-i="${i}" style="--k:${h.height || 1}" aria-label="Meet ${h.name}">${character(h)}<span class="host-name">${h.name}</span></button>`).join('');
-  document.querySelectorAll('.host').forEach(b => b.onclick = () => openHost(+b.dataset.i));
+  const figs = CONFIG.hosts.map((h, i) =>
+    `<button class="host${h.pet ? ' pet' : ''}" data-i="${i}" style="--k:${h.height || 1}" aria-label="Meet ${h.name}">${character(h)}</button>`).join('');
+  const names = CONFIG.hosts.map((h, i) =>
+    `<button class="host-name" data-i="${i}" aria-label="Meet ${h.name}">${h.name}</button>`).join('');
+  $('#hostGrid').innerHTML = `<div class="figs">${figs}</div><div class="names">${names}</div>`;
+  document.querySelectorAll('#hostGrid [data-i]').forEach(b => b.onclick = () => openHost(+b.dataset.i));
 }
 function openHost(i) {
   const h = CONFIG.hosts[i];
