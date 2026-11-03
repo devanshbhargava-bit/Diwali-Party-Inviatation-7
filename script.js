@@ -1,7 +1,7 @@
 /* ============ EDIT ME: ALL PLACEHOLDER CONTENT LIVES HERE ============ */
 const CONFIG = {
   // Paste your Google Apps Script Web App URL here (see README). Until then, RSVPs CANNOT be saved.
-  APPS_SCRIPT_URL: 'PASTE_YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE',
+  APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbwpfBrUWM8NtSRndezVS8FiExEPtf4XZAHmQhY45ppTFWHYKlOXTYMxvXhgl1xmmwDG/exec',
 
   // Background music: paste any YouTube link between the quotes (leave '' for no music).
   // Example: 'https://www.youtube.com/watch?v=XXXXXXXXXXX'. Music starts on the guest's first tap; a 🔊 button mutes it.
