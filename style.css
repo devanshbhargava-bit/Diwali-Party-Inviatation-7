@@ -178,3 +178,8 @@ h1,h2{background-image:linear-gradient(100deg,#b8862b 0%,var(--gold) 20%,#fff3c4
 .host.pet{margin:0 calc(var(--fig)*-.07);position:relative;z-index:2}
 .host.pet .host-name{font-size:clamp(1rem,3.8vw,1.35rem)}
 .detail-avatar img{max-width:100%;object-fit:contain}
+
+/* ===== Phones: nudge Devansh a little toward the centre (Ishika & Breezer unchanged) ===== */
+@media (max-width:600px){
+  .host-stage .host:first-child:not(.pet){translate:3.5vw 0}
+}
