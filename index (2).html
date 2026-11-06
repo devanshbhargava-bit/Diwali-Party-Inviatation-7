@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bhargava's Diwali Party</title>
+<!-- Optional fonts. If blocked/offline, the fallbacks in style.css are used. -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;1,500&family=Poppins:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="stars" id="stars" aria-hidden="true"></div>
+<canvas id="fx" aria-hidden="true"></canvas>
+<div class="lights" id="lights" aria-hidden="true"></div>
+<!-- Background music (YouTube). Set the link in script.js: CONFIG.MUSIC_YOUTUBE_URL -->
+<button class="music" id="musicBtn" hidden aria-label="Toggle background music" aria-pressed="false">🔇</button>
+<div id="ytHolder" aria-hidden="true"><div id="ytPlayer"></div></div>
+
+<!-- Festive doors used for the transition into the invitation -->
+<div id="doors" aria-hidden="true"><div class="door l"></div><div class="door r"></div><div class="door-diyas" id="doorDiyas"></div></div>
+
+<main>
+  <!-- SCREEN 1: MEET YOUR HOSTS -->
+  <section class="screen active" id="hosts">
+    <div id="hostPick" class="stack wide">
+      <h1>MEET YOUR HOSTS</h1>
+      <p class="sub">The people behind the Diwali madness!</p>
+      <div class="host-stage" id="hostGrid"></div>
+      <p class="hint">👆 Tap on a host to know more about them</p>
+      <button class="skip" id="skipBtn">MOVE FORWARD →</button>
+    </div>
+    <div id="hostDetail" class="stack detail" hidden>
+      <div id="detailAvatar" class="detail-avatar"></div>
+      <h2 id="detailName"></h2>
+      <blockquote id="detailIntro"></blockquote>
+      <button class="btn ghost" id="backBtn">‹ BACK</button>
+    </div>
+  </section>
+
+  <!-- SCREEN 2: THE GRAND DIWALI INVITATION
+       Edit the event details directly below (date, time, venue, maps link, dress code). -->
+  <section class="screen" id="invite">
+    <div class="stack wide inv">
+      <div class="hero">
+        <div class="diya-row" id="heroDiyas"></div>
+        <p class="party-name">YOU'RE OFFICIALLY INVITED!</p>
+        <h1>BHARGAVA'S DIWALI PARTY</h1>
+        <p class="lead hero-sub">A night of lights, laughter and madness!</p>
+        <span class="scroll-hint" aria-hidden="true">↓</span>
+      </div>
+
+      <div class="countdown-wrap reveal">
+        <p class="cd-title">⏳ COUNTDOWN TO THE CELEBRATION</p>
+        <div class="countdown" id="countdown">
+          <div class="cd"><b id="cd-d">--</b><span>DAYS</span></div><div class="cd"><b id="cd-h">--</b><span>HRS</span></div>
+          <div class="cd"><b id="cd-m">--</b><span>MINS</span></div><div class="cd"><b id="cd-s">--</b><span>SECS</span></div>
+        </div>
+      </div>
+
+      <div class="dt-grid">
+        <div class="card reveal"><svg class="ico cal" viewBox="0 0 48 48" role="img" aria-label="Calendar"><rect x="5" y="9" width="38" height="34" rx="6" fill="#fbf1dc"/><path d="M5 15a6 6 0 0 1 6-6h26a6 6 0 0 1 6 6v6H5z" fill="#e2b84a"/><rect x="13" y="4" width="4" height="10" rx="2" fill="#7a1523"/><rect x="31" y="4" width="4" height="10" rx="2" fill="#7a1523"/><text x="24" y="19.5" text-anchor="middle" font-size="8" font-weight="700" fill="#4a0d1a" font-family="Poppins,Arial,sans-serif">NOV</text><text x="24" y="38" text-anchor="middle" font-size="19" font-weight="700" fill="#7a1523" font-family="Poppins,Arial,sans-serif">7</text></svg><h3>DATE</h3><p>7th November 2026</p></div>
+        <div class="card reveal"><span class="ico">🕟</span><h3>TIME</h3><p>4:30 PM onwards</p></div>
+      </div>
+
+      <div class="card venue reveal">
+        <span class="ico">📍</span>
+        <div><h3>VENUE</h3><p>C-502, Prateek Stylome, Sector 45, Noida</p></div>
+        <!-- Google Maps link -->
+        <a class="btn small" href="https://share.google/aTFxMUUfqkGHQC8vj" target="_blank" rel="noopener">GET DIRECTIONS</a>
+      </div>
+
+      <div class="dress reveal"><span class="ico">🥻</span><h3>DRESS CODE</h3><p>Ethnic Wear</p><span class="chip">🚫 No Blacks</span></div>
+
+      <div class="byob reveal">
+        <span class="glass" aria-hidden="true">🥂</span>
+        <h2 class="plain">🍹 BYOB – BRING YOUR OWN BEVERAGE</h2>
+        <p>No pressure to bring anything! There will be a per-head contribution towards the alcohol arrangements.</p>
+      </div>
+
+      <div class="rules">
+        <h2 class="plain rules-title reveal">GENERAL INSTRUCTIONS 📜🪩</h2>
+        <div class="rule r1 reveal"><span class="emo">🍹</span><h3>1. The Mixing Policy</h3>
+          <p>Drinks are on the agenda, and Devansh is on mixing duty. Consider yourself in safe (and slightly experimental) hands!</p></div>
+        <div class="rule r2 reveal"><span class="emo">🍕</span><h3>2. Food Arrangements</h3>
+          <p>From chakhna and light snacks to a full-fledged dinner, we've got your cravings covered. Come hungry, leave happy!</p></div>
+        <div class="rule r3 reveal"><span class="emo">🪩</span><h3>3. The Dance Floor</h3>
+          <p>No one is escaping the dance floor. Whether you've got killer moves or two left feet, participation is compulsory. Ishika ki nazar sab jagah hai, so not dancing is simply NOT an option.</p></div>
+        <div class="rule r4 reveal"><span class="emo">👑</span><h3>4. The Final Rule</h3>
+          <p class="law">NEVER SAY NO TO THE BHARGAVAS.</p>
+          <p>No excuses. No negotiations. No appeals. That's final.</p>
+          <span class="stamp">FINAL</span></div>
+      </div>
+
+      <div class="row reveal cta"><button class="btn" id="toRsvp">LET'S LOCK YOUR ATTENDANCE →</button></div>
+      <button class="btn ghost small" id="inviteBack">‹ BACK</button>
+    </div>
+  </section>
+
+  <!-- SCREEN 3: RSVP -->
+  <section class="screen" id="rsvp">
+    <div class="stack wide">
+      <h2>Will you be joining us for the celebration?</h2>
+      <div class="notice" id="dupNotice" hidden>
+        <p id="dupText"></p>
+        <button class="btn ghost small" id="updateBtn">UPDATE MY RESPONSE</button>
+      </div>
+      <div id="rsvpBody">
+        <div class="choices">
+          <button class="btn choice yes" type="button" data-resp="Wouldn't Miss It for the World!" aria-pressed="false">WOULDN'T MISS IT FOR THE WORLD!</button>
+          <button class="btn choice yes" type="button" data-resp="Haan Bhai Haan" aria-pressed="false">HAAN BHAI HAAN</button>
+          <button class="btn choice yes" type="button" data-resp="Bilkul" aria-pressed="false">BILKUL</button>
+          <button class="btn choice no" id="noBtn" type="button" aria-pressed="false">SORRY, CAN'T MAKE IT.</button>
+        </div>
+        <form id="rsvpForm" novalidate hidden>
+          <div class="field"><label for="name">Full Name</label>
+            <input id="name" name="name" autocomplete="name" maxlength="80"><small class="err" data-for="name"></small></div>
+          <div class="yesOnly">
+            <fieldset class="field"><legend>Team</legend>
+              <label class="pill"><input type="radio" name="team" value="Team Devansh"><span>Team Devansh</span></label>
+              <label class="pill"><input type="radio" name="team" value="Team Ishika"><span>Team Ishika</span></label>
+              <small class="err" data-for="team"></small></fieldset>
+            <div class="field"><label for="drinking">Drinking Preference</label>
+              <select id="drinking" name="drinking"><option value="">Select…</option><option>Heavy Drinker</option><option>Light Drinker</option><option>Pilaoge toh mana nahi karunga</option><option>Sirf Chakhna khana hai</option></select>
+              <small class="err" data-for="drinking"></small></div>
+            <div class="field"><label for="comments">Additional Comments (optional)</label>
+              <textarea id="comments" name="comments" rows="3" maxlength="500"></textarea></div>
+          </div>
+          <div class="noOnly">
+            <div class="field"><label for="message">Message for the hosts (optional)</label>
+              <textarea id="message" name="message" rows="3" maxlength="500"></textarea></div>
+          </div>
+          <p class="banner" id="formBanner" role="alert" hidden></p>
+          <button class="btn" id="submitBtn" type="submit">SEND MY RSVP</button>
+        </form>
+      </div>
+      <button class="btn ghost small" id="rsvpBack">‹ BACK TO INVITATION</button>
+    </div>
+  </section>
+
+  <!-- SCREEN 4: SECRET MISSION (placeholder only) -->
+  <section class="screen" id="mission">
+    <div class="stack">
+      <button class="envelope" id="envelope" aria-label="Locked secret mission envelope">
+        <span class="flap"></span><span class="seal">🔒</span>
+      </button>
+      <h2>Your secret mission awaits...</h2>
+      <p class="sub" id="missionHint">Tap the envelope</p>
+      <div class="mission-card" id="missionCard" hidden><p class="tag">🤫 TOP SECRET</p><p id="missionText"></p></div>
+      <button class="btn" id="toFinal">CONTINUE</button>
+      <button class="btn ghost small" id="missionBack">‹ BACK</button>
+    </div>
+  </section>
+
+  <!-- SCREEN 5: FINAL CONFIRMATION -->
+  <section class="screen" id="final">
+    <div class="stack">
+      <div class="diya-row" id="finalDiyas"></div>
+      <h1 id="finalHead"></h1>
+      <p class="lead" id="finalText"></p>
+      <p class="banner" id="previewNote" hidden>Preview mode: this response was NOT saved anywhere.</p>
+      <button class="btn ghost" id="viewAgain">VIEW INVITATION AGAIN</button>
+      <button class="btn ghost small" id="finalBack">‹ BACK</button>
+    </div>
+  </section>
+</main>
+<script src="script.js"></script>
+</body>
+</html>
