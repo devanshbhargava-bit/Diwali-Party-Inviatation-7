@@ -1,7 +1,10 @@
 /* ============ EDIT ME: ALL PLACEHOLDER CONTENT LIVES HERE ============ */
 const CONFIG = {
   // Paste your Google Apps Script Web App URL here (see README). Until then, RSVPs CANNOT be saved.
-  APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbwpfBrUWM8NtSRndezVS8FiExEPtf4XZAHmQhY45ppTFWHYKlOXTYMxvXhgl1xmmwDG/exec',
+  APPS_SCRIPT_URL: 'PASTE_YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE',
+
+  // When the party starts (drives the countdown). Format: YYYY-MM-DDTHH:MM:SS+05:30 (IST).
+  PARTY_START: '2026-11-07T16:30:00+05:30',
 
   // Background music: paste any YouTube link between the quotes (leave '' for no music).
   // Example: 'https://www.youtube.com/watch?v=XXXXXXXXXXX'. Music starts on the guest's first tap; a 🔊 button mutes it.
@@ -33,6 +36,7 @@ const STORE = 'diwaliRsvp.v1';
 
 /* ---------- Screens ---------- */
 function show(id) {
+  if (id === 'mission') prepMission();
   document.querySelectorAll('.screen').forEach(s => s.classList.toggle('active', s.id === id));
   window.scrollTo(0, 0);
   document.querySelectorAll(`#${id} .reveal`).forEach(el => io.observe(el));
@@ -130,7 +134,6 @@ async function enterInvite() {
   d.className = '';
 }
 $('#skipBtn').onclick = enterInvite;
-$('#toRsvp').onclick = () => show('rsvp');
 $('#rsvpBack').onclick = () => show('invite');
 
 /* ---------- Screen 3: RSVP ---------- */
@@ -197,7 +200,7 @@ form.onsubmit = async ev => {
   busy = true; $('#submitBtn').disabled = true; $('#submitBtn').textContent = 'SENDING…'; $('#formBanner').hidden = true;
   try {
     await send(payload);               // success is shown ONLY after the backend confirms
-    if (!PREVIEW) localStorage.setItem(STORE, JSON.stringify({ id: submissionId, name, attending }));
+    if (!PREVIEW) localStorage.setItem(STORE, JSON.stringify({ id: submissionId, name, attending })); setCta();
     finish(name, attending); 
   } catch (e) {
     $('#formBanner').textContent = `Your RSVP was not sent. ${e.message}`; $('#formBanner').hidden = false;
@@ -217,10 +220,6 @@ function finish(name, yes) {
     finalFrom = 'rsvp'; show('final');
   }
 }
-$('#envelope').onclick = function () {
-  this.classList.remove('shake'); void this.offsetWidth; this.classList.add('shake'); burst();
-  $('#missionHint').textContent = 'Sealed until the party. Your mission will be revealed soon.';
-};
 $('#toFinal').onclick = () => show('final');
 /* ---------- Back buttons ---------- */
 let finalFrom = 'rsvp';
@@ -250,5 +249,59 @@ $('#viewAgain').onclick = () => show('invite');
   btn.onclick = () => { want = !on; on ? pause() : play(); };
 })();
 
+/* ---------- Secret mission (looked up from the Google Sheet) ---------- */
+const SEALED = "Sealed until the party. Your mission will be revealed soon. Come back to this link on the same phone you RSVP’d with.";
+function prepMission() {
+  $('#missionCard').hidden = true; $('#envelope').classList.remove('open');
+  $('#missionHint').textContent = 'Tap the envelope';
+}
+async function getMission(id) {
+  const url = CONFIG.APPS_SCRIPT_URL;
+  if (url.startsWith('PASTE_')) {
+    if (PREVIEW) return { status: 'ok', mission: '[Preview only: your real secret mission will appear here once it is assigned in the sheet.]' };
+    throw new Error('not set up');
+  }
+  const ctl = new AbortController(), t = setTimeout(() => ctl.abort(), 20000);
+  try {
+    const r = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action: 'mission', id }), signal: ctl.signal });
+    const j = await r.json(); if (!j.ok) throw new Error(j.error || 'server'); return j;
+  } finally { clearTimeout(t); }
+}
+async function revealMission() {
+  const env = $('#envelope'), hint = $('#missionHint'), s = saved(), mine = s && s.attending;
+  if (env.dataset.busy) return;
+  env.classList.remove('shake'); void env.offsetWidth; env.classList.add('shake');
+  if (!mine && !PREVIEW) { burst(); hint.textContent = SEALED; return; }   // no RSVP on this phone: sealed, as before
+  env.dataset.busy = 1; hint.textContent = 'Decrypting your mission…';
+  try {
+    const r = await getMission(mine ? s.id : '');
+    if (r.status === 'ok') {
+      $('#missionText').textContent = r.mission; $('#missionCard').hidden = false;
+      env.classList.add('open'); hint.textContent = 'Mission accepted? Keep it top secret. 🤫'; burst();
+    } else if (r.status === 'pending') { burst(); hint.textContent = SEALED; }
+    else hint.textContent = "We couldn't find your RSVP. Please RSVP again from the invitation page.";
+  } catch (e) { hint.textContent = 'Could not reach HQ. Check your connection and tap again.'; }
+  finally { delete env.dataset.busy; }
+}
+$('#envelope').onclick = revealMission;
+
+// Invitation button: guests who already RSVP'd YES (on this phone) go straight to their mission.
+function setCta() {
+  const s = saved();
+  $('#toRsvp').textContent = s && s.attending ? 'REVEAL MY SECRET MISSION →' : "LET'S LOCK YOUR ATTENDANCE →";
+}
+$('#toRsvp').onclick = () => { const s = saved(); show(s && s.attending ? 'mission' : 'rsvp'); };
+
+/* ---------- Countdown ---------- */
+(function countdown() {
+  const T = new Date(CONFIG.PARTY_START).getTime(), box = $('#countdown'), el = k => $('#cd-' + k);
+  const tick = () => {
+    const t = Math.floor((T - Date.now()) / 1000);
+    if (t <= 0) { box.innerHTML = '<p class="party-time">🪔 It’s party time! 🎉</p>'; clearInterval(iv); return; }
+    [t / 86400 | 0, (t % 86400) / 3600 | 0, (t % 3600) / 60 | 0, t % 60].forEach((v, i) => el('dhms'[i]).textContent = String(v).padStart(2, '0'));
+  };
+  const iv = setInterval(tick, 1000); tick();
+})();
+
 /* ---------- Init ---------- */
-fillDiyas(); renderHosts(); initRsvpState();
+fillDiyas(); renderHosts(); initRsvpState(); setCta();
