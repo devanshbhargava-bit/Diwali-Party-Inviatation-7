@@ -1,7 +1,7 @@
 /* ============ EDIT ME: ALL PLACEHOLDER CONTENT LIVES HERE ============ */
 const CONFIG = {
   // Paste your Google Apps Script Web App URL here (see README). Until then, RSVPs CANNOT be saved.
-  APPS_SCRIPT_URL: 'PASTE_YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE',
+  APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbwpfBrUWM8NtSRndezVS8FiExEPtf4XZAHmQhY45ppTFWHYKlOXTYMxvXhgl1xmmwDG/exec',
 
   // When the party starts (drives the countdown). Format: YYYY-MM-DDTHH:MM:SS+05:30 (IST).
   PARTY_START: '2026-11-07T16:30:00+05:30',
