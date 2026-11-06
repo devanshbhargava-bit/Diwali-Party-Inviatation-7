@@ -184,3 +184,18 @@ h1,h2{background-image:linear-gradient(100deg,#b8862b 0%,var(--gold) 20%,#fff3c4
 /* ===== Breezer: sits in front, between the two hosts ===== */
 .host.pet{margin:0 calc(var(--fig)*-.07);position:relative;z-index:2;--ny:4px} /* 4px: keeps Breezer's paws just in front of the others' feet, as before */
 .detail-avatar img{max-width:100%;object-fit:contain}
+
+/* ===== V3: countdown + secret mission ===== */
+.countdown-wrap{width:100%;text-align:center}
+.cd-title{font:600 .8rem 'Poppins',sans-serif;letter-spacing:.18em;color:var(--orange);margin-bottom:.6rem}
+.countdown{display:grid;grid-template-columns:repeat(4,1fr);gap:.6rem}
+.cd{border:1px solid rgba(226,184,74,.45);border-radius:16px;background:var(--glass);padding:.8rem .2rem}
+.cd b{display:block;font:800 clamp(1.6rem,8vw,2.4rem)/1.1 'Playfair Display',Georgia,serif;color:var(--gold2);font-variant-numeric:tabular-nums}
+.cd span{font-size:.68rem;letter-spacing:.14em;opacity:.8}
+.party-time{grid-column:1/-1;font:700 1.6rem 'Playfair Display',Georgia,serif;color:var(--gold2)}
+.name-ask{width:100%}
+.mission-card{width:100%;text-align:center;border:2px solid var(--gold);border-radius:20px;padding:1.3rem 1.2rem;background:linear-gradient(135deg,rgba(226,184,74,.16),rgba(255,138,61,.12));box-shadow:0 0 30px rgba(226,184,74,.3);animation:fade .6s}
+.mission-card .tag{display:inline-block;font:800 .8rem 'Poppins',sans-serif;letter-spacing:.25em;color:#7a1523;background:var(--gold2);padding:.2rem .8rem;border-radius:6px;rotate:-3deg;margin-bottom:.7rem}
+.mission-card #missionText{font-size:1.15rem;white-space:pre-line}
+.envelope.open{animation:none;opacity:.55}.envelope.open .seal{display:none}
+.envelope .flap{transition:transform .6s;transform-origin:top}.envelope.open .flap{transform:rotateX(180deg)}
